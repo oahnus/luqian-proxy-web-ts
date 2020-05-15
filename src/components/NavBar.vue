@@ -119,7 +119,7 @@
                 <img src="../assets/user.png" alt="user">
               </div>
               <div class="username">
-                {{userInfoGetter.username}}
+                {{userInfo.username}}
               </div>
             </div>
             <el-dropdown-menu slot="dropdown">
@@ -135,6 +135,7 @@
     <el-drawer
       title="Login"
       append-to-body
+      size="450px"
       :with-header="false"
       :visible.sync="showDrawer"
       direction="rtl">
@@ -204,10 +205,10 @@
 
   @Component
   export default class NavBar extends Vue {
-    @Auth.Getter('isLogin') isLoginGetter:boolean;
-    @Auth.Getter('userInfo') userInfoGetter:User;
     @Auth.Mutation('setUserInfo') setUserInfo: Function;
     @Auth.Mutation('setIsLogin') setIsLogin: Function;
+    @Auth.Getter('isLogin') isLogin: boolean;
+    @Auth.Getter('userInfo') userInfo: User;
 
     showDrawer: boolean = false;
     hasAccount: boolean = true;
@@ -215,9 +216,13 @@
     usernameErr: string = '';
     passwordErr: string = '';
 
-    loginForm:LoginForm = {
+    loginForm: LoginForm = {
       username: 'ligoudan',
       password: '123456',
+    }
+
+    get isLoginGetter(): boolean {
+      return this.$store.state.AuthModule.inLogin;
     }
 
     public created(): void {
@@ -265,7 +270,11 @@
         let user: User = data
         this.setUserInfo(user)
         this.setIsLogin(true)
-        this.$router.replace('/dashboard')
+
+        let {path} = this.$route
+        if (path === '/' || path === '') {
+          this.$router.replace('/dashboard')
+        }
       }
     }
 

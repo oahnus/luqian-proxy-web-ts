@@ -7,9 +7,12 @@
     "jsx": "preserve",
     "importHelpers": true,
     "moduleResolution": "node",
-    "experimentalDecorators": true,
     "esModuleInterop": true,
     "strictPropertyInitialization" : false,
+    // 启用 vue-class-component 及 vuex-class 需要开启此选项
+    "experimentalDecorators": true,
+    // 启用 vuex-class 需要开启此选项
+    "strictFunctionTypes": false,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",

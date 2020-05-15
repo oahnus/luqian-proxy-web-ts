@@ -19,12 +19,27 @@
   import SideBar from '@/components/SideBar'
   import {Component, Vue, Prop} from "vue-property-decorator"
 
+  import {
+    Getter,
+    Mutation,
+    namespace,
+  } from 'vuex-class';
+
+  const Auth = namespace('AuthModule');
+
   @Component({
     components: {
       NavBar, SideBar,
     }
   })
-  export default class App extends Vue {}
+  export default class App extends Vue {
+    @Auth.Getter('isLogin') isLoginGetter:boolean;
+
+    public created(): void {
+      let {path} = this.$route
+      console.log('%c[App-created]', 'color: #63ADD1', path)
+    }
+  }
 </script>
 
 <style lang="less">

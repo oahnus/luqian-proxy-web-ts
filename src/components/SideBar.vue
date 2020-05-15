@@ -16,7 +16,7 @@
 
 <template>
   <div class="SideBar" :class="isCollapse ? '' : 'show-side'">
-    <el-menu default-active="dashboard"
+    <el-menu :default-active="activeIndex"
              class="side-menu"
              @open=""
              @close=""
@@ -49,7 +49,7 @@
         <i class="el-icon-s-promotion"></i>
         <span slot="title">代理设置</span>
       </el-menu-item>
-      <el-menu-item index="setting">
+      <el-menu-item index="setting" disabled>
         <i class="el-icon-s-tools"></i>
         <span slot="title">设置</span>
       </el-menu-item>
@@ -68,15 +68,37 @@
   @Component
   export default class SideBar extends Vue {
     isCollapse: boolean = false
+    activeIndex: string = 'dashboard'
+
+    created(): void {
+      let {path} = this.$route
+      switch (path) {
+        case '/application':
+          this.activeIndex = 'application'
+          break
+        case '/dashboard':
+          this.activeIndex = 'dashboard'
+          break
+        case '/proxy':
+          this.activeIndex = 'proxy'
+          break
+        default:
+      }
+    }
 
     public handleMenuSelect(index:string, indexPath:any): void {
-      console.log(index)
       switch (index) {
         case 'collapse':
           this.isCollapse = !this.isCollapse
           break
         case 'application':
           this.$router.push('/application')
+          break
+        case 'dashboard':
+          this.$router.push('/dashboard')
+          break
+        case 'proxy':
+          this.$router.push('/proxy')
           break
         default:
       }

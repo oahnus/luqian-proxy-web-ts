@@ -26,7 +26,15 @@ const routes: RouteConfig[] = [
     meta: {
       showSideBar: true,
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/AppTable.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '../views/AppTable/AppTable.vue'),
+  },
+  {
+    path: '/proxy',
+    name: 'Proxy',
+    meta: {
+      showSideBar: true,
+    },
+    component: () => import(/* webpackChunkName: "about" */ '../views/ProxyTable/ProxyTable.vue'),
   },
   {
     path: '/about',
