@@ -8,6 +8,10 @@ import urls from '@/utils/urls'
 import notify from '@/utils/notify'
 import VueRouter, {RawLocation} from 'vue-router'
 
+import VueCookies from 'vue-cookies-ts'
+
+Vue.use(VueCookies)
+
 // Antv G2 vue components
 import Viser from 'viser-vue'
 Vue.use(Viser)
@@ -19,15 +23,17 @@ import {
   RadioGroup, RadioButton,
   Drawer, Dropdown, DropdownMenu, DropdownItem, Submenu,
   Menu, MenuItem, MenuItemGroup,
-  Table, TableColumn, MessageBox, Dialog
+  Table, TableColumn, MessageBox, Dialog, Card,
+  Progress
 } from 'element-ui'
 
 Vue.use(Button).use(RadioButton).use(RadioGroup).use(Option)
   .use(Form).use(FormItem).use(Input).use(Switch).use(InputNumber).use(Select)
   .use(Table).use(TableColumn)
   .use(Menu).use(MenuItem).use(MenuItemGroup).use(Submenu)
-  .use(Dropdown).use(DropdownItem).use(DropdownMenu)
+  .use(Dropdown).use(DropdownItem).use(DropdownMenu).use(Card)
   .use(Drawer).use(Dialog)
+  .use(Progress)
 
 Vue.prototype.$message = Message;
 Vue.prototype.$http = http;

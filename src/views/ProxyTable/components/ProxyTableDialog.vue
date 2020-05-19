@@ -24,7 +24,7 @@
               v-for="(item, index) in appList"
               :key="index"
               :label="item.name"
-              :value="item.id">
+              :value="item.appId">
             </el-option>
           </el-select>
         </el-form-item>
@@ -142,7 +142,7 @@
         this.$notify.warning('内网服务地址不能为空')
         return
       }
-      if (isRandom && lang.isEmpty(port)) {
+      if (!isRandom && lang.isEmpty(port)) {
         this.$notify.warning('固定端口时，端口号不能为空')
         return
       }

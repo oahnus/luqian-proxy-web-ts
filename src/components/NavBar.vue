@@ -41,6 +41,9 @@
     border: 2px solid #fff;
     border-radius: 50%;
     background: #e5e5e5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     img {
       width: 30px;

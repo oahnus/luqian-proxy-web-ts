@@ -38,6 +38,10 @@
     public created(): void {
       let {path} = this.$route
       console.log('%c[App-created]', 'color: #63ADD1', path)
+      console.log('%c[App-created]', 'color: #63ADD1', this.isLoginGetter)
+      if (this.isLoginGetter) {
+        this.$router.replace('/dashboard')
+      }
     }
   }
 </script>

@@ -35,12 +35,22 @@ export class Measure {
 }
 
 export class StatItem {
-  date: String
-  name?: String
+  date: string
+  name?: string
   inBytes: number
   outBytes: number
 }
 
+export enum StatUnit {
+  B, KB, MB, GB
+}
+
 export class Statistics {
   dateStats: StatItem[]
+  statUnit: string
+  todayInBytes?: number
+  todayOutBytes?: number
+  todayConCount?: number
+  trafficLimit?: number
+  usedTraffic?: number
 }
