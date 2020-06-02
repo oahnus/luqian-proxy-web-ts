@@ -23,7 +23,20 @@ export class ProxyTable {
   port?: number
   enable: boolean
   createTime?: string
+  isUseDomain: boolean
+  isHttps: boolean
+  domainId?: number
+  domain?: string
 }
+
+export class SysDomain {
+  id: number
+  domain: string
+  name: string
+  https: string
+  port: number
+}
+
 export class Measure {
   id: number
   appId: string

@@ -55,11 +55,41 @@
                 width="120px"
                 prop="port">
           <template slot-scope="scope">
-            {{ scope.row.port }} {{scope.row.isRandom ? '(随机)' : '(固定)'}}
+            <div v-if="scope.row.isUseDomain">
+              -
+            </div>
+            <div v-else>
+              {{ scope.row.port }} {{scope.row.isRandom ? '(随机)' : '(固定)'}}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+                label="域名"
+                prop="port">
+          <template slot-scope="scope">
+            <div v-if="scope.row.isUseDomain">
+              {{scope.row.domain || '-'}}
+            </div>
+            <div v-else>
+              -
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+                label="Https"
+                prop="port">
+          <template slot-scope="scope">
+            <div v-if="scope.row.isUseDomain">
+              {{scope.row.isHttps ? '支持' : '不支持'}}
+            </div>
+            <div v-else>
+              -
+            </div>
           </template>
         </el-table-column>
         <el-table-column
                 label="状态"
+                width="100px"
                 prop="">
           <template slot-scope="scope">
             {{scope.row.enable ? '启用' : '停用'}}

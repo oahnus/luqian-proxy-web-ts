@@ -24,6 +24,11 @@ export default class AuthModule extends VuexModule {
 
   @Mutation
   public setUserInfo(user: User): void {
-    this.user = user
+    if (user) {
+      this.user = user
+      this.inLogin = true
+    } else {
+      this.inLogin = false
+    }
   }
 }

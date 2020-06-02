@@ -9,6 +9,7 @@
     }
     .stat-chart {
       margin-right: 20px;
+      min-height: 300px;
     }
     .main-con {
       display: flex;

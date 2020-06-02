@@ -11,10 +11,12 @@ const urls = {
   addProxyTable: '/proxyTable/add',
   updateProxyTable: '/proxyTable/update',
   delProxyTable: '/proxyTable/remove',
+  checkDomainSize: '/proxyTable/domain/size',
 
   getMeasureReport: '/monitor/stat',
 
-  signIn: '/acct/signIn'
+  signIn: '/acct/signIn',
+
 }
 
 export default urls

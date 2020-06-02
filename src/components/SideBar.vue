@@ -22,11 +22,11 @@
              @close=""
              @select="handleMenuSelect"
              :collapse="isCollapse">
-      <el-menu-item index="collapse">
-        <i class="el-icon-menu"></i>
-        <span slot="title" v-if="isCollapse">展开</span>
-        <span slot="title" v-else>折叠</span>
-      </el-menu-item>
+<!--      <el-menu-item index="collapse">-->
+<!--        <i class="el-icon-menu"></i>-->
+<!--        <span slot="title" v-if="isCollapse">展开</span>-->
+<!--        <span slot="title" v-else>折叠</span>-->
+<!--      </el-menu-item>-->
 
 <!--      <el-submenu index="1">-->
 <!--        <template slot="title">-->

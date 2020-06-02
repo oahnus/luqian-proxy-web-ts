@@ -11,10 +11,10 @@
     <el-dialog
       :title="isEdit ? '编辑' : '新增'"
       :visible.sync="dialogVisible"
-      width="400px"
+      width="450px"
       :modal-append-to-body="false">
 
-      <el-form ref="form" label-width="80px">
+      <el-form ref="form" label-width="100px">
         <el-form-item label="名称">
           <el-input v-model="form.name" class="full-size"></el-input>
         </el-form-item>
@@ -33,7 +33,21 @@
                     class="full-size"
                     placeholder="格式: ip地址:端口"></el-input>
         </el-form-item>
-        <el-form-item label="对外端口">
+        <el-form-item label="是否使用域名">
+          <el-switch active-text="使用"
+                     inactive-text="不使用"
+                     @change="onIsUseDomainChange"
+                     v-model="form.isUseDomain"
+          ></el-switch>
+        </el-form-item>
+        <el-form-item label="是否支持https" v-if="form.isUseDomain">
+          <el-switch active-text="使用"
+                     inactive-text="不使用"
+                     v-model="form.isHttps"
+          ></el-switch>
+        </el-form-item>
+
+        <el-form-item label="对外端口" v-if="!form.isUseDomain">
           <el-input-number v-model="form.port"
                            class="full-size"
                            :step="1"
@@ -41,7 +55,7 @@
                            :max="80000">
           </el-input-number>
         </el-form-item>
-        <el-form-item label="端口规则">
+        <el-form-item label="端口规则" v-if="!form.isUseDomain">
           <el-switch active-text="随机端口"
                      inactive-text="固定端口"
                      v-model="form.isRandom"
@@ -65,7 +79,6 @@
 
 <script lang="ts">
   /**
-   *
    * Live Template 0.0.1
    * AppTableDialog
    */
@@ -83,28 +96,21 @@
   @Component
   export default class ProxyTableDialog extends Vue {
     @AppModule.Mutation('setAppList') private setAppList: Function;
-    @AppModule.Getter('appListGetter') appList: AppTable[];
 
     private dialogVisible: boolean = false;
     private form: ProxyTable | any = null;
     private isEdit: boolean = false;
 
-    get appList(): AppTable[] {
-      return this.$store.state.AppTableModule.appTableList;
-    }
+    private appList: AppTable[] = []
 
     public created(): void {
       this.form = this.initForm()
-      if (lang.isEmpty(this.appList)) {
-        // 尝试获取appList
-        this.fetchAppList()
-      }
-      console.log('%c[ProxyTableDialog-created]', 'color: #63ADD1', this.appList)
+      this.fetchAppList()
     }
 
     async fetchAppList(): Promise<void> {
       let data: AppTable[] = await this.$http.get(this.$urls.getAppList)
-      this.setAppList(data)
+      this.appList = data || []
     }
 
     public open(row: ProxyTable | null): void {
@@ -126,7 +132,34 @@
         serviceAddr: '',
         isRandom: false,
         sysUserId: -1,
-        enable: true
+        enable: true,
+        isUseDomain: false,
+        isHttps: false,
+        port: 0,
+        domainId: -1,
+        domain: ''
+      }
+    }
+
+    public async onIsUseDomainChange(): Promise<void> {
+      if (this.form.isUseDomain) {
+        // 查询可用域名数量
+        let dataMap:{availableSize: number, httpsSize: number} = await this.$http.get(this.$urls.checkDomainSize)
+        let availableSize = dataMap.availableSize || 0
+        let httpsSize = dataMap.httpsSize || 0
+        // 可用域名数
+        if (availableSize === 0) {
+          this.$notify.warning('可用域名数量为0')
+          this.form.isUseDomain = false
+          this.form.isHttps = false
+          return;
+        }
+        // https域名数
+        if (this.form.isHttps && httpsSize === 0) {
+          this.$notify.warning('可用https域名数量为0')
+          this.form.isHttps = false
+          return;
+        }
       }
     }
 

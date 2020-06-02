@@ -2,6 +2,7 @@ import axios, {AxiosResponse} from 'axios'
 import { RespData } from '@/types/RespData'
 import { Message } from 'element-ui';
 import router from '@/router/index'
+import Vue from 'vue'
 
 let instance: any = {}
 
@@ -12,7 +13,16 @@ instance = axios.create({
 
 instance.interceptors.request.use(
   (config: any) => {
-    return config;
+    let token = Vue.cookies.get('token')
+    let headers = config['headers']
+    if (headers) {
+      headers['AUTH'] = Vue.cookies.get('token')
+    } else {
+      config['headers'] = {
+        'AUTH': Vue.cookies.get('token')
+      }
+    }
+    return config
   },
   (error: any) => {
     // Do something with request error

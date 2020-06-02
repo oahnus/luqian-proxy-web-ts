@@ -109,7 +109,7 @@
   <div>
     <div class="NavBar">
       <div class="nav-l">
-        Home
+        O-Proxy
       </div>
       <div class="nav-r">
         <div class="unLogin" v-if="!isLoginGetter">
@@ -172,7 +172,15 @@
                      @click="submitRegister"
                      type="primary">注 册</el-button>
           <div class="extra-btn">
-            <el-button type="text" class="gray" @click="switchToRegister">注册</el-button>
+            <el-button v-if="hasAccount"
+                       type="text"
+                       class="gray"
+                       @click="switchToRegister">注册</el-button>
+            <el-button v-else
+                       type="text"
+                       class="gray"
+                       @click="switchToLogin">已有账号, 去登录</el-button>
+
             <el-button type="text" class="gray"></el-button>
           </div>
 
@@ -239,12 +247,16 @@
     switchToRegister() {
       this.hasAccount = false
     }
+    switchToLogin() {
+      this.hasAccount = true
+    }
     handleDropdownCmd(cmd: string): void {
       switch (cmd) {
         case 'logout':
           this.$http.get(this.$urls.logout)
           this.setIsLogin(false)
-          this.setUserInfo({username: '', id: -1})
+          this.setUserInfo(null)
+          this.$cookies.remove('token')
           this.$router.replace('/')
           break;
         case 'setting':
@@ -267,12 +279,10 @@
 
     public async fetchUserInfo(): Promise<void> {
       let data = await this.$http.get(this.$urls.getUserInfo)
-      console.log(data)
 
       if (data) {
         let user: User = data
         this.setUserInfo(user)
-        this.setIsLogin(true)
 
         let {path} = this.$route
         if (path === '/' || path === '') {
@@ -304,15 +314,13 @@
       let formData = new FormData();
       formData.append('username', this.loginForm.username)
       formData.append('password', this.loginForm.password)
-      const data = await this.$http.post(this.$urls.login, formData)
-      if (data) {
-        let user: User = data
-        this.setIsLogin(true)
-        this.setUserInfo(user)
+      const token = await this.$http.post(this.$urls.login, formData)
+      if (token) {
         this.showDrawer = false
+        this.$cookies.set('token', token)
+        this.fetchUserInfo()
         this.$router.push('/dashboard')
       }
-      console.log(data)
     }
 
     public async submitLogin(): Promise<void> {
