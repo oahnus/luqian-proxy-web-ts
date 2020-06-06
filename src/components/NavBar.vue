@@ -9,7 +9,10 @@
     border: 1px solid #e5e5e5;
   }
   .nav-l {
-
+    width: 228px;
+    border-right: 1px solid #e5e5e5;
+    line-height: 50px;
+    font-size: 24px;
   }
   .nav-r {
     .nav-drop {
@@ -26,6 +29,10 @@
   .unLogin {
     display: flex;
     flex-direction: row;
+    div {
+      display: flex;
+      justify-content: center;
+    }
   }
   .unLogin > div {
     margin: 0 5px;

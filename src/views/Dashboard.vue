@@ -74,7 +74,7 @@
   <div class="dashboard">
     <div class="stat-label">流量走势 单位：({{statData.statUnit}})</div>
     <div class="stat-chart">
-      <v-chart :forceFit="true" :height="height" :width="width" :data="chartData" :scale="scale">
+      <v-chart :forceFit="true" :height="height" :data="chartData" :scale="scale">
         <v-tooltip :crosshairs="crosshairs"></v-tooltip>
         <v-axis dataKey="date" :label="label"></v-axis>
         <v-line position="date*bytes" color='type'></v-line>
@@ -127,20 +127,16 @@
 
 <script lang="ts">
   import { Component, Prop, Vue } from 'vue-property-decorator';
+  import {
+    Getter,
+    Mutation,
+    namespace,
+  } from 'vuex-class';
+  const Auth = namespace('AuthModule');
 
   import {StatItem, Statistics} from '@/types/domain'
   import DataSet from '@antv/data-set'
-
-  enum TrafficType {
-    IN = '入网流量',
-    OUT = '出网流量'
-  }
-
-  class ChartItem {
-    date: string
-    type: string
-    bytes: number = 0
-  }
+  import {User} from '@/types/domain'
 
   const ONE_KB = 1024;
   const ONE_MB = ONE_KB * 1024;
@@ -165,6 +161,8 @@
     }
   })
   export default class HelloWorld extends Vue {
+    @Auth.Getter('userInfo') userInfo: User;
+
     percentage: number = 0
     colors: any[] = [
       {color: '#f56c6c', percentage: 20},
@@ -227,33 +225,34 @@
           let now = new Date()
           let usedTime = (now.getHours() * 60 + now.getMinutes()) * 60 + now.getSeconds();
           let expires = ONE_DAY - usedTime
-          console.log('%c[Dashboard-signIn]', 'color: #63ADD1', usedTime)
-          console.log('%c[Dashboard-signIn]', 'color: #63ADD1', expires)
-          this.$cookies.set('isSigned', true, {expires: expires})
+          let userId = this.userInfo.id
+          this.$cookies.set('isSigned' + userId, true, {expires: expires})
         }
       }
     }
     checkData(): void {
-      let signed = this.$cookies.get('isSigned');
+      let userId = this.userInfo.id
+      let signed = this.$cookies.get('isSigned' + userId);
       this.isSigned = !!signed
+    }
+    draw(data: Statistics) {
+      let {trafficLimit=0, usedTraffic=0} = data
+      this.percentage = trafficLimit == 0 ? 0 : parseFloat(((usedTraffic / trafficLimit) * 100).toFixed(2));
+
+      const dv = new DataSet.View().source(data.dateStats);
+      dv.transform({
+        type: 'fold',
+        fields: ['inBytes', 'outBytes'],
+        key: 'type',
+        value: 'bytes',
+      });
+      this.chartData = dv.rows
     }
     async fetchData(): Promise<void> {
       let data: Statistics = await this.$http.get(this.$urls.getMeasureReport)
-      console.log(data)
       if (data) {
         this.statData = data
-
-        let {trafficLimit=0, usedTraffic=0} = data
-        this.percentage = trafficLimit == 0 ? 0 : parseFloat(((usedTraffic / trafficLimit) * 100).toFixed(2));
-
-        const dv = new DataSet.View().source(data.dateStats);
-        dv.transform({
-          type: 'fold',
-          fields: ['inBytes', 'outBytes'],
-          key: 'type',
-          value: 'bytes',
-        });
-        this.chartData = dv.rows
+        this.draw(data)
       }
     }
   }

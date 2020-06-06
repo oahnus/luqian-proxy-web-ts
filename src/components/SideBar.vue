@@ -49,6 +49,10 @@
         <i class="el-icon-s-promotion"></i>
         <span slot="title">代理设置</span>
       </el-menu-item>
+      <el-menu-item index="version">
+        <i class="el-icon-document"></i>
+        <span slot="title">更新日志</span>
+      </el-menu-item>
       <el-menu-item index="setting" disabled>
         <i class="el-icon-s-tools"></i>
         <span slot="title">设置</span>
@@ -82,6 +86,9 @@
         case '/proxy':
           this.activeIndex = 'proxy'
           break
+        case '/version':
+          this.activeIndex = 'version'
+          break
         default:
       }
     }
@@ -99,6 +106,9 @@
           break
         case 'proxy':
           this.$router.push('/proxy')
+          break
+        case 'version':
+          this.$router.push('/version')
           break
         default:
       }

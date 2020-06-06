@@ -17,6 +17,7 @@ const urls = {
 
   signIn: '/acct/signIn',
 
+  versionList: '/version/page',
 }
 
 export default urls

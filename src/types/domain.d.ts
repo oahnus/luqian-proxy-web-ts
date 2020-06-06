@@ -67,3 +67,26 @@ export class Statistics {
   trafficLimit?: number
   usedTraffic?: number
 }
+
+export class SysVersion {
+  id: number
+  version: string
+  date: string
+  url: string
+
+  addJson: string
+  uptJson: string
+  delJson: string
+
+  addList: string[]
+  uptList: string[]
+  delList: string[]
+}
+export class PageInfo<T> {
+  pageNum: number
+  pageSize: number
+  isFirstPage: boolean
+  isLastPage: boolean
+  total: number
+  list: T[]
+}

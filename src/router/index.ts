@@ -10,7 +10,7 @@ const routes: RouteConfig[] = [
     meta: {
       showSideBar: false,
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/Welcome.vue'),
+    component: () => import(/* webpackChunkName: "welcome" */ '../views/Welcome.vue'),
   },
   {
     path: '/dashboard',
@@ -18,7 +18,7 @@ const routes: RouteConfig[] = [
     meta: {
       showSideBar: true,
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/Dashboard.vue'),
+    component: () => import(/* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
   },
   {
     path: '/application',
@@ -26,7 +26,7 @@ const routes: RouteConfig[] = [
     meta: {
       showSideBar: true,
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/AppTable/AppTable.vue'),
+    component: () => import(/* webpackChunkName: "appTable" */ '../views/AppTable/AppTable.vue'),
   },
   {
     path: '/proxy',
@@ -34,7 +34,15 @@ const routes: RouteConfig[] = [
     meta: {
       showSideBar: true,
     },
-    component: () => import(/* webpackChunkName: "about" */ '../views/ProxyTable/ProxyTable.vue'),
+    component: () => import(/* webpackChunkName: "proxyTable" */ '../views/ProxyTable/ProxyTable.vue'),
+  },
+  {
+    path: '/version',
+    name: 'Version',
+    meta: {
+      showSideBar: false,
+    },
+    component: () => import(/* webpackChunkName: "version" */ '../views/Version.vue'),
   },
   {
     path: '/about',

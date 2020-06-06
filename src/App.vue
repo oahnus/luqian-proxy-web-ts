@@ -41,6 +41,8 @@
       console.log('%c[App-created]', 'color: #63ADD1', this.isLoginGetter)
       if (this.isLoginGetter) {
         this.$router.replace('/dashboard')
+      } else {
+        this.$router.replace('/')
       }
     }
   }
