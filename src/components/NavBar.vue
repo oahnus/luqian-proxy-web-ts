@@ -235,8 +235,8 @@
     passwordErr: string = '';
 
     loginForm: LoginForm = {
-      username: 'ligoudan',
-      password: '123456',
+      username: '',
+      password: '',
     }
 
     get isLoginGetter(): boolean {

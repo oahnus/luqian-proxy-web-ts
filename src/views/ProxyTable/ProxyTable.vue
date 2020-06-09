@@ -131,7 +131,7 @@
 
   import {ProxyTable} from '@/types/domain'
 
-  import ProxyTableDialog from './components/ProxyTableDialog'
+  // @ts-ignore
   import ProxyTableDialog from '@/views/ProxyTable/components/ProxyTableDialog.vue';
 
   @Component({
@@ -167,8 +167,8 @@
       this.fetchData()
     }
     public async handleAdd(): Promise<void> {
-      let proxyDlg: ProxyTableDialog = this.$refs.proxyDialog
-      proxyDlg.open()
+      let proxyDlg: any = this.$refs.proxyDialog
+      proxyDlg.open(null)
     }
 
     public created(): void {

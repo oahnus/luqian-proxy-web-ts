@@ -82,7 +82,9 @@
   import {Component, Vue, Prop} from "vue-property-decorator"
   import {AppTable} from '@/types/domain'
 
-  import AppTableDialog from './components/AppTableDialog'
+  // @ts-ignore
+  import AppTableDialog from '@/views/AppTable/components/AppTableDialog.vue'
+
   import {
     Getter,
     Mutation,
