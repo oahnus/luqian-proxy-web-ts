@@ -49,6 +49,10 @@
         <i class="el-icon-s-promotion"></i>
         <span slot="title">代理设置</span>
       </el-menu-item>
+      <el-menu-item index="domain" v-if="hasDomainPerm">
+        <i class="el-icon-document"></i>
+        <span slot="title">域名管理</span>
+      </el-menu-item>
       <el-menu-item index="version">
         <i class="el-icon-document"></i>
         <span slot="title">更新日志</span>
@@ -68,9 +72,17 @@
    * SideBar
    */
   import {Component, Vue, Prop} from "vue-property-decorator"
+  import {
+    namespace,
+  } from 'vuex-class';
+  import {User} from '@/types/domain'
+
+  const Auth = namespace('AuthModule');
 
   @Component
   export default class SideBar extends Vue {
+    @Auth.State('user') userInfo: User;
+
     isCollapse: boolean = false
     activeIndex: string = 'dashboard'
 
@@ -93,6 +105,17 @@
       }
     }
 
+    /**
+     * 是否用域名查询权限
+     */
+    get hasDomainPerm(): boolean {
+      let permList = this.userInfo.permissionList
+      if (permList) {
+        return permList.findIndex(perm => perm.value === 'queryDomain') !== -1
+      }
+      return false;
+    }
+
     public handleMenuSelect(index:string, indexPath:any): void {
       switch (index) {
         case 'collapse':
@@ -109,6 +132,9 @@
           break
         case 'version':
           this.$router.push('/version')
+          break
+        case 'domain':
+          this.$router.push('/domain')
           break
         default:
       }

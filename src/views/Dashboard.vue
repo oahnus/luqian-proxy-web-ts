@@ -97,7 +97,7 @@
         </div>
 
         <div class="bottom">
-          <el-button size="middle" @click="signIn" :disabled="isSigned">签到</el-button>
+          <el-button size="middle" @click="signIn" :disabled="isSigned">{{isSigned ? '已签到' : '签到'}}</el-button>
         </div>
       </el-card>
       <el-card class="right">

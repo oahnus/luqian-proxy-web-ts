@@ -44,15 +44,20 @@
         </el-table-column>
         <el-table-column
                 label="应用Id"
+                header-align="center"
+                align="left"
                 prop="appId"
         ></el-table-column>
         <el-table-column
                 label="服务地址"
+                header-align="center"
+                align="left"
                 prop="serviceAddr"
         ></el-table-column>
         <el-table-column
                 label="对外端口"
-                width="120px"
+                width="130"
+                align="center"
                 prop="port">
           <template slot-scope="scope">
             <div v-if="scope.row.isUseDomain">
@@ -65,6 +70,8 @@
         </el-table-column>
         <el-table-column
                 label="域名"
+                header-align="center"
+                align="left"
                 prop="port">
           <template slot-scope="scope">
             <div v-if="scope.row.isUseDomain">
@@ -77,6 +84,8 @@
         </el-table-column>
         <el-table-column
                 label="Https"
+                align="center"
+                width="80px"
                 prop="port">
           <template slot-scope="scope">
             <div v-if="scope.row.isUseDomain">
@@ -89,10 +98,20 @@
         </el-table-column>
         <el-table-column
                 label="状态"
-                width="100px"
+                align="center"
+                width="80px"
                 prop="">
           <template slot-scope="scope">
-            {{scope.row.enable ? '启用' : '停用'}}
+            {{scope.row.active ? '运行中' : '未运行'}}
+          </template>
+        </el-table-column>
+        <el-table-column
+                label="是否可用"
+                align="center"
+                width="80px"
+                prop="">
+          <template slot-scope="scope">
+            {{scope.row.enable ? '可用' : '禁用'}}
 
 <!--            <el-switch active-text="启用"-->
 <!--                       inactive-text="停用"-->
@@ -103,11 +122,14 @@
         </el-table-column>
         <el-table-column
                 label="创建时间"
+                align="center"
+                show-overflow-tooltip
                 prop="createTime"
         ></el-table-column>
         <el-table-column
                 prop=""
                 align="center"
+                min-width="100"
                 label="操作"
         ><template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleEditRow(scope.row)">修改</el-button>

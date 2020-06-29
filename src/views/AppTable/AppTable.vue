@@ -43,23 +43,24 @@
         </template>
         </el-table-column>
         <el-table-column
-                prop="appId"
-                label="应用id"
-                align="left"
-        ></el-table-column>
-        <el-table-column
                 prop="name"
                 label="应用名称"
-                align="left"
+                header-align="center"
+        ></el-table-column>
+        <el-table-column
+                prop="appId"
+                label="应用id"
+                header-align="center"
         ></el-table-column>
         <el-table-column
                 prop="appSecret"
                 label="应用密钥"
-                align="left"
+                header-align="center"
         ></el-table-column>
         <el-table-column
                 prop=""
                 align="center"
+                width="120"
                 label="操作"
         ><template slot-scope="scope">
           <el-button type="primary" size="mini" @click="handleEditRow(scope.row)">修改</el-button>

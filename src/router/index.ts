@@ -45,6 +45,14 @@ const routes: RouteConfig[] = [
     component: () => import(/* webpackChunkName: "version" */ '../views/Version.vue'),
   },
   {
+    path: '/domain',
+    name: 'Domain',
+    meta: {
+      showSideBar: true,
+    },
+    component: () => import(/* webpackChunkName: "version" */ '../views/Domain/DomainTable.vue'),
+  },
+  {
     path: '/about',
     name: 'About',
     meta: {

@@ -18,6 +18,11 @@ const urls = {
   signIn: '/acct/signIn',
 
   versionList: '/version/page',
+
+  getDomainList: '/domain/list',
+  createDomain: '/domain/create',
+  changeDomainStatus: '/domain/status',
+  updateDomain: '/domain/update'
 }
 
 export default urls

@@ -104,7 +104,7 @@
       flex-direction: row;
       justify-content: space-between;
       margin: 0 10px 5px 10px;
-      
+
       .gray {
         color: #999;
       }
@@ -190,7 +190,6 @@
 
             <el-button type="text" class="gray"></el-button>
           </div>
-
         </div>
       </div>
     </el-drawer>
@@ -205,8 +204,6 @@
    */
   import {Component, Vue, Prop} from "vue-property-decorator"
   import {
-    Getter,
-    Mutation,
     namespace,
   } from 'vuex-class';
 
@@ -225,8 +222,8 @@
   export default class NavBar extends Vue {
     @Auth.Mutation('setUserInfo') setUserInfo: Function;
     @Auth.Mutation('setIsLogin') setIsLogin: Function;
-    @Auth.Getter('isLogin') isLogin: boolean;
-    @Auth.Getter('userInfo') userInfo: User;
+    @Auth.State('inLogin') isLogin: boolean;
+    @Auth.State('user') userInfo: User;
 
     showDrawer: boolean = false;
     hasAccount: boolean = true;
@@ -326,7 +323,6 @@
         this.showDrawer = false
         this.$cookies.set('token', token)
         this.fetchUserInfo()
-        this.$router.push('/dashboard')
       }
     }
 

@@ -3,6 +3,15 @@ export class User {
   username: string
   email?: string
   balance?: number
+  permissionList?: SysPermission[]
+}
+
+export class SysPermission {
+  id: number
+  name: string
+  value: string
+  url: string
+  enable: boolean
 }
 
 export class AppTable {
@@ -33,8 +42,9 @@ export class SysDomain {
   id: number
   domain: string
   name: string
-  https: string
+  https: boolean
   port: number
+  enable: boolean
 }
 
 export class Measure {

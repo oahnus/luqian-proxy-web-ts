@@ -166,7 +166,7 @@
     async handleSubmit(): Promise<void> {
       console.log(this.form)
 
-      let {appId, serviceAddr, port, isRandom} = this.form
+      let {appId, serviceAddr, port, isRandom, isUseDomain} = this.form
       if (lang.isEmpty(appId)) {
         this.$notify.warning('未绑定关联应用')
         return
@@ -175,7 +175,7 @@
         this.$notify.warning('内网服务地址不能为空')
         return
       }
-      if (!isRandom && lang.isEmpty(port)) {
+      if (!isRandom &&!isUseDomain && lang.isEmpty(port)) {
         this.$notify.warning('固定端口时，端口号不能为空')
         return
       }
