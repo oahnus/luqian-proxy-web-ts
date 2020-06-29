@@ -43,7 +43,7 @@ export class SysDomain {
   domain: string
   name: string
   https: boolean
-  port: number
+  port?: number
   enable: boolean
 }
 

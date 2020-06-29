@@ -108,7 +108,7 @@
             <div class="version-num">{{item.version}}</div>
             <div class="ver-head-r">
               <div class="date">{{item.date}}</div>
-              <div class="download" @click="downloadClient">下载</div>
+              <div class="download" @click="downloadClient(item)">下载</div>
             </div>
           </div>
           <div class="ver-content">

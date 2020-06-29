@@ -86,11 +86,11 @@
 
     private initForm(): SysDomain {
       return {
-        id: null,
+        id: undefined,
         domain: '',
         name: '',
         https: false,
-        port: null
+        port: undefined
       }
     }
   }
