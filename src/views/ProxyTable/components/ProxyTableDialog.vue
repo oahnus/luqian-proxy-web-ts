@@ -50,9 +50,10 @@
         <el-form-item label="对外端口" v-if="!form.isUseDomain">
           <el-input-number v-model="form.port"
                            class="full-size"
+                           placeholder="2000 - 20000"
                            :step="1"
                            :min="2000"
-                           :max="80000">
+                           :max="20000">
           </el-input-number>
         </el-form-item>
         <el-form-item label="端口规则" v-if="!form.isUseDomain">
@@ -135,7 +136,7 @@
         enable: true,
         isUseDomain: false,
         isHttps: false,
-        port: 0,
+        port: undefined,
         domainId: -1,
         domain: ''
       }
