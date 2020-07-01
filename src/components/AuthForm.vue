@@ -128,7 +128,7 @@
    * Live Template 0.0.1
    * AuthForm
    */
-  import {Component, Vue, Prop} from "vue-property-decorator"
+  import {Component, Vue, Prop, Watch} from "vue-property-decorator"
 
   import {AuthFormObj} from '@/types/common'
   import {Form} from 'element-ui'
@@ -202,26 +202,27 @@
         this.captchaUrl = `/api${this.$urls.captchaImgUrl}?ticket=${this.ticket}&t=${t}`
       })
     }
-    updated(): void {
-      if (this.isLogin) {
-        // @ts-ignore
-        let loginForm: Form = this.$refs.loginForm
-        if (loginForm) {
-          loginForm.clearValidate()
-        }
-      } else {
-        // @ts-ignore
-        let registerForm: Form = this.$refs.registerForm
-        if (registerForm) {
-          registerForm.clearValidate()
-        }
-      }
-    }
 
     public showRegister(): void {
       this.getTicket()
       this.isLogin = false
+      console.log('%c[AuthForm-showRegister]', 'color: #63ADD1', )
     }
+    @Watch("isLogin")
+    public watchIsLogin(newVal: boolean, oldVal: boolean): void {
+      if (newVal) {
+        setTimeout(() => {
+          // @ts-ignore
+          this.$refs.loginForm && this.$refs.loginForm.clearValidate()
+        }, 200)
+      } else {
+        setTimeout(() => {
+          // @ts-ignore
+          this.$refs.registerForm && this.$refs.registerForm.clearValidate()
+        }, 200)
+      }
+    }
+
     public showLogin(): void {
       this.isLogin = true
     }
