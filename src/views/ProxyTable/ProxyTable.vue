@@ -175,6 +175,7 @@
 
     }
     private handleEditRow(row: ProxyTable): void {
+      // @ts-ignore
       let proxyDlg: ProxyTableDialog = this.$refs.proxyDialog
       proxyDlg.open(row)
     }

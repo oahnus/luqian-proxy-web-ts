@@ -22,7 +22,11 @@ const urls = {
   getDomainList: '/domain/list',
   createDomain: '/domain/create',
   changeDomainStatus: '/domain/status',
-  updateDomain: '/domain/update'
+  updateDomain: '/domain/update',
+
+  captchaImgUrl: '/open/captcha',
+  captchaTicket: '/open/captcha/ticket',
+  checkUsername: '/open/username/exist',
 }
 
 export default urls

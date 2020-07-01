@@ -39,13 +39,12 @@ instance.interceptors.response.use(
       if (respData.code === 0) {
         return respData.data
       } else {
+        Message({
+          message: respData.msg,
+          type: 'error'
+        })
         if (respData.code === 60401) {
           router.replace('/')
-        } else {
-          Message({
-            message: respData.msg,
-            type: 'error'
-          })
         }
         return Promise.reject(new Error(respData.msg || 'Error'))
       }

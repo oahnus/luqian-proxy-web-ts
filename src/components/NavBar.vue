@@ -57,59 +57,6 @@
       height: 30px;
     }
   }
-  .login-form-con {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 40%;
-    padding: 0 15%;
-  }
-  .form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-
-    .f-input {
-      margin: 3px 0;
-      width: 100%;
-    }
-
-    .err-msg {
-      color: orangered;
-      font-size: 14px;
-      margin-left: 3px;
-      height: 16px;
-    }
-  }
-  .header {
-    display: flex;
-    justify-content: center;
-    font-size: 25px;
-    margin-bottom: 40px;
-    font-weight: bold;
-    letter-spacing: 5px;
-  }
-  .btn-con {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-
-    .main-btn{
-      margin-top: 10px;
-    }
-
-    .extra-btn {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      margin: 0 10px 5px 10px;
-
-      .gray {
-        color: #999;
-      }
-    }
-  }
 </style>
 
 <template>
@@ -149,49 +96,7 @@
       :with-header="false"
       :visible.sync="showDrawer"
       direction="rtl">
-      <div class="login-form-con">
-        <div class="header">
-          <div>{{hasAccount ? 'Login' : 'Register'}}</div>
-        </div>
-        <div class="form">
-          <el-input v-model="loginForm.username"
-                    class="f-input"
-                    @focus="handleInputFocus"
-                    placeholder="username"></el-input>
-          <div class="err-msg">{{ !!usernameErr ? usernameErr : ''}}</div>
-          <el-input v-model="loginForm.password"
-                    placeholder="password"
-                    class="f-input"
-                    @focus="handleInputFocus"
-                    type="password"></el-input>
-          <div class="err-msg" v-if="!!passwordErr">{{!!passwordErr ? passwordErr : ''}}</div>
-        </div>
-
-        <div class="btn-con">
-          <el-button size="medium"
-                     v-if="hasAccount"
-                     class="main-btn"
-                     @click="submitLogin"
-                     type="primary">登 录</el-button>
-          <el-button size="medium"
-                     v-else
-                     class="main-btn"
-                     @click="submitRegister"
-                     type="primary">注 册</el-button>
-          <div class="extra-btn">
-            <el-button v-if="hasAccount"
-                       type="text"
-                       class="gray"
-                       @click="switchToRegister">注册</el-button>
-            <el-button v-else
-                       type="text"
-                       class="gray"
-                       @click="switchToLogin">已有账号, 去登录</el-button>
-
-            <el-button type="text" class="gray"></el-button>
-          </div>
-        </div>
-      </div>
+      <auth-form :form="authForm" ref="authForm" @login="submitLogin" @register="submitRegister"></auth-form>
     </el-drawer>
   </div>
 </template>
@@ -209,16 +114,17 @@
 
   import lang from '@/utils/lang'
   import {User} from '@/types/domain'
+  import {AuthFormObj} from '@/types/common'
+  // @ts-ignore
+  import AuthForm from './AuthForm.vue'
 
   const Auth = namespace('AuthModule');
 
-  class LoginForm {
-    public username: string
-    public password: string
-    public captcha?: string
-  }
-
-  @Component
+  @Component({
+    components: {
+      AuthForm
+    }
+  })
   export default class NavBar extends Vue {
     @Auth.Mutation('setUserInfo') setUserInfo: Function;
     @Auth.Mutation('setIsLogin') setIsLogin: Function;
@@ -226,12 +132,8 @@
     @Auth.State('user') userInfo: User;
 
     showDrawer: boolean = false;
-    hasAccount: boolean = true;
 
-    usernameErr: string = '';
-    passwordErr: string = '';
-
-    loginForm: LoginForm = {
+    authForm: AuthFormObj = {
       username: '',
       password: '',
     }
@@ -241,19 +143,9 @@
     }
 
     public created(): void {
-      this.clearErrMsg()
       this.fetchUserInfo()
     }
 
-    handleInputFocus(): void {
-      this.clearErrMsg()
-    }
-    switchToRegister() {
-      this.hasAccount = false
-    }
-    switchToLogin() {
-      this.hasAccount = true
-    }
     handleDropdownCmd(cmd: string): void {
       switch (cmd) {
         case 'logout':
@@ -274,11 +166,11 @@
 
     public showLoginForm(): void {
       this.showDrawer = true
-    }
-
-    clearErrMsg(): void {
-      this.usernameErr = '';
-      this.passwordErr = '';
+      this.authForm = { username: '', password: '' }
+      let authFormElem: AuthForm = this.$refs.authForm
+      if (authFormElem) {
+        authFormElem.init()
+      }
     }
 
     public async fetchUserInfo(): Promise<void> {
@@ -296,50 +188,36 @@
     }
 
     public async submitRegister(): Promise<void> {
-      this.clearErrMsg()
-      if (lang.isEmpty(this.loginForm.username)) {
-        this.usernameErr = '用户名不能为空'
-        return;
+      try {
+        await this.$http.post(this.$urls.register, this.authForm)
+      } catch (e) {
+        let authFormElem: AuthForm = this.$refs.authForm
+        if (authFormElem) {
+          authFormElem.refreshCaptcha()
+        }
+        return
       }
-      if (this.loginForm.username.length < 6) {
-        this.usernameErr = '用户名不能小于6个字符'
-        return;
-      }
-      if (lang.isEmpty(this.loginForm.password)) {
-        this.passwordErr = '密码不能为空'
-        return;
-      }
-      await this.$http.post(this.$urls.register, this.loginForm)
-
       this.sendLoginForm()
     }
 
     public async sendLoginForm(): Promise<void> {
       let formData = new FormData();
-      formData.append('username', this.loginForm.username)
-      formData.append('password', this.loginForm.password)
-      const token = await this.$http.post(this.$urls.login, formData)
-      if (token) {
-        this.showDrawer = false
-        this.$cookies.set('token', token)
-        this.fetchUserInfo()
+      formData.append('username', this.authForm.username)
+      formData.append('password', this.authForm.password)
+      try {
+        const token = await this.$http.post(this.$urls.login, formData)
+        if (token) {
+          this.showDrawer = false
+          this.$cookies.set('token', token)
+          this.fetchUserInfo()
+        }
+      } catch (e) {
+        console.log('%c[NavBar-sendLoginForm]', 'color: #63ADD1', e.response)
+
       }
     }
 
-    public async submitLogin(): Promise<void> {
-      this.clearErrMsg()
-      if (lang.isEmpty(this.loginForm.username)) {
-        this.usernameErr = '用户名不能为空'
-        return;
-      }
-      if (this.loginForm.username.length < 6) {
-        this.usernameErr = '用户名不能小于6个字符'
-        return;
-      }
-      if (lang.isEmpty(this.loginForm.password)) {
-        this.passwordErr = '密码不能为空'
-        return;
-      }
+    public submitLogin(): void {
       this.sendLoginForm()
     }
   }
